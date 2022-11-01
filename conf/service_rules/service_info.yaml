@@ -1,0 +1,18 @@
+- id: 1
+  loadType: http
+  serviceName: "HTTP 反向代理测试服务 1"
+  serviceDesc: "HTTP 反向代理测试服务 1"
+  createdAt: "2022-10-26 15:45:50.000"
+  detail:
+    ruleType: url_prefix
+    rule: "/test1"
+    need_strip_uri: true
+- id: 2
+  loadType: http
+  serviceName: "HTTP 反向代理测试服务 1"
+  serviceDesc: "HTTP 反向代理测试服务 1"
+  createdAt: "2022-10-27 15:45:50.000"
+  detail:
+    ruleType: domain
+    rule: "www.test2.com"
+    need_strip_uri: true
