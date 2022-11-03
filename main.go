@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	_ = lib.InitModule("./conf/dev/", []string{"base", "proxy"})
+	_ = lib.InitModule("./conf/dev/", []string{"base", "proxy", "secret", "token_cache"})
 	defer lib.Destroy()
 
 	_ = service.ManagerHandler.LoadOnce()
@@ -21,5 +21,5 @@ func main() {
 	signal.Notify(quit, syscall.SIGKILL, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	proxy.HttpsProxyStop()
+	proxy.HttpProxyStop()
 }

@@ -18,7 +18,7 @@
       "check_timeout": 5,
       "check_interval": 120,
       "round_type": "round",
-      "ip_list": "127.0.0.1:3008",
+      "ip_list": "172.16.63.131:3008",
       "forbid_list": "",
       "upstream_connect_timeout": 5,
       "upstream_header_timeout": 5,
