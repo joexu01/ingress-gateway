@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-//设置Translation
+// TranslationMiddleware 负责国际化和参数验证
 func TranslationMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//参照：https://github.com/go-playground/validator/blob/v9/_examples/translations/main.go

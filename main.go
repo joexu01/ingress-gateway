@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/joexu01/ingress-gateway/lib"
 	proxy "github.com/joexu01/ingress-gateway/proxy_http_router"
+	"github.com/joexu01/ingress-gateway/secret"
 	"github.com/joexu01/ingress-gateway/service"
 	cache "github.com/joexu01/ingress-gateway/token_cache"
 	token "github.com/joexu01/ingress-gateway/token_service"
@@ -16,6 +17,7 @@ func main() {
 	defer lib.Destroy()
 
 	_ = service.ManagerHandler.LoadOnce()
+	secret.RemoteSecretHandler.LoadSecrets()
 
 	go proxy.HttpProxyRun()
 	go cache.HttpServerRun()

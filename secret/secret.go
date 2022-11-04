@@ -9,15 +9,6 @@ var RemoteSecretHandler *Service
 
 func init() {
 	RemoteSecretHandler = &Service{secretMap: make(map[string]*Item)}
-	conf := lib.GetStringMapStringConf("secret.secrets")
-
-	for serviceIP, secretStr := range conf {
-		item := &Item{
-			SecretStr: secretStr,
-			CreatedAt: time.Now().Unix(),
-		}
-		RemoteSecretHandler.secretMap[serviceIP] = item
-	}
 }
 
 type Item struct {
@@ -27,6 +18,18 @@ type Item struct {
 
 type Service struct {
 	secretMap map[string]*Item
+}
+
+func (s *Service) LoadSecrets() {
+	conf := lib.GetStringMapStringConf("secret.secrets")
+
+	for serviceIP, secretStr := range conf {
+		item := &Item{
+			SecretStr: secretStr,
+			CreatedAt: time.Now().Unix(),
+		}
+		RemoteSecretHandler.secretMap[serviceIP] = item
+	}
 }
 
 func (s *Service) RetrieveSecret(remoteIP string) string {

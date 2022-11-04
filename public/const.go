@@ -23,6 +23,9 @@ const (
 	JwtExpires = 60 * 60
 
 	ServiceRuleFile = "conf/service_rules/service.json"
+
+	TokenRequestTypeGateway      = "gateway"
+	TokenRequestTypeMicroservice = "microservice"
 )
 
 var (
