@@ -1,1 +1,10 @@
 .idea
+certificates/ca.crt
+certificates/ca.key
+certificates/ca.srl
+certificates/client.crt
+certificates/client.csr
+certificates/client.key
+certificates/server.crt
+certificates/server.csr
+certificates/server.key

@@ -1,0 +1,5 @@
+ca domain: gateway-token.io
+
+server domain: gateway-token.io
+
+client domain: microservice1.io

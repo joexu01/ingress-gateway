@@ -27,6 +27,12 @@ func NewTokenCacheService(cacheType string) {
 	default:
 		TokenCacheServiceHandler = NewMemoryCacheService(300)
 	}
+	addSomeData()
+}
+
+func addSomeData() {
+	_ = TokenCacheServiceHandler.Validate("token 188")
+	_ = TokenCacheServiceHandler.Validate("token 189")
 }
 
 func TokenInitRouter() *gin.Engine {
@@ -46,7 +52,7 @@ func HttpServerRun() {
 	gin.SetMode(lib.ConfBase.DebugMode)
 	r := TokenInitRouter()
 	TokenHttpSrvHandler = &http.Server{
-		Addr:           lib.GetStringConf("base.http.addr"),
+		Addr:           lib.GetStringConf("token_cache.http.addr"),
 		Handler:        r,
 		ReadTimeout:    time.Duration(lib.GetIntConf("token_cache.http.read_timeout")) * time.Second,
 		WriteTimeout:   time.Duration(lib.GetIntConf("token_cache.http.write_timeout")) * time.Second,

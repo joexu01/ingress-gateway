@@ -36,7 +36,6 @@ func echo(rw http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", echo) // 注册路由以及回调函数
-	// 监听ip和端口，第二个参数为nil，则使用默认的DefaultServeMux来处理请求
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		panic(err)
 	}
