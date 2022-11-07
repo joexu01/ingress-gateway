@@ -2,9 +2,12 @@
 certificates/ca.crt
 certificates/ca.key
 certificates/ca.srl
-certificates/client.crt
-certificates/client.csr
-certificates/client.key
+certificates/client1.crt
+certificates/client1.csr
+certificates/client1.key
+certificates/client2.crt
+certificates/client2.csr
+certificates/client2.key
 certificates/server.crt
 certificates/server.csr
 certificates/server.key

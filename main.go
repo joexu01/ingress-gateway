@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	_ = lib.InitModule("./conf/dev/", []string{"base", "proxy", "secret", "token_cache"})
+	_ = lib.InitModule("./conf/dev/", []string{"base", "proxy", "secret", "token_cache", "token_service", "user"})
 	defer lib.Destroy()
 
 	_ = service.ManagerHandler.LoadOnce()

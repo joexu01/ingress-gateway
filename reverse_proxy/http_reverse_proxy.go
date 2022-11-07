@@ -5,7 +5,6 @@ import (
 	"compress/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/joexu01/ingress-gateway/middleware"
-	"github.com/joexu01/ingress-gateway/reverse_proxy/balance"
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
@@ -15,13 +14,13 @@ import (
 )
 
 func NewLoadBalanceReverseProxy(
-	c *gin.Context, l balance.LoadBalance, trans *http.Transport) *httputil.ReverseProxy {
+	c *gin.Context, nextAddr string, trans *http.Transport) *httputil.ReverseProxy {
 	//请求协调者
 	director := func(req *http.Request) {
-		nextAddr, err := l.Get(req.URL.String())
-		if err != nil || nextAddr == "" {
-			panic("failed to get next address")
-		}
+		//nextAddr, err := l.Get(req.URL.String())
+		//if err != nil || nextAddr == "" {
+		//	panic("failed to get next address")
+		//}
 		target, err := url.Parse(nextAddr)
 		if err != nil {
 			panic(err)
@@ -37,7 +36,7 @@ func NewLoadBalanceReverseProxy(
 			req.URL.RawQuery = targetQuery + "&" + req.URL.RawQuery
 		}
 		if _, ok := req.Header["User-Agent"]; !ok {
-			req.Header.Set("User-Agent", "HTTP Security Gateway V1.0")
+			req.Header.Set("User-Agent", "HTTP Secure Gateway V1.0")
 		}
 	}
 	//更改内容

@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -18,7 +19,7 @@ func main() {
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(cert)
 
-	certificate, err := tls.LoadX509KeyPair("../../certificates/client.crt", "../../certificates/client.key")
+	certificate, err := tls.LoadX509KeyPair("../../certificates/client1.crt", "../../certificates/client1.key")
 	if err != nil {
 		log.Fatalf("could not load certificate: %v", err)
 	}
@@ -37,6 +38,8 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
+
+	fmt.Println("Content Len:", resp.ContentLength)
 
 	buf := make([]byte, 200)
 	_, _ = resp.Body.Read(buf)

@@ -1,6 +1,10 @@
 package token
 
-import "github.com/golang-jwt/jwt/v4"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/joexu01/ingress-gateway/public"
+)
 
 type DefaultTokenClaims struct {
 	TokenType       string        `json:"ttp"`
@@ -42,4 +46,8 @@ type IssueRequest struct {
 	UserID string `json:"userID"`
 
 	PreviousToken string `json:"previousToken"`
+}
+
+func (params *IssueRequest) BindValidParams(c *gin.Context) error {
+	return public.DefaultGetValidParams(c, params)
 }

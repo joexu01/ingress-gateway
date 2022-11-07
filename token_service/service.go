@@ -4,9 +4,11 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"github.com/gin-gonic/gin"
 	cert "github.com/joexu01/ingress-gateway/certificates"
 	"github.com/joexu01/ingress-gateway/lib"
+	"github.com/joexu01/ingress-gateway/middleware"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -23,7 +25,33 @@ func IssuerInitRouter() *gin.Engine {
 			"message": "pong",
 		})
 	})
+	router.POST("/issue", IssueMicroserviceTokenHandler)
 	return router
+}
+
+func IssueMicroserviceTokenHandler(c *gin.Context) {
+	req := &IssueRequest{}
+	err := req.BindValidParams(c)
+	if err != nil {
+		middleware.ResponseError(c, 2000, err)
+		return
+	}
+
+	remoteIP := c.RemoteIP()
+	log.Println("Remote IP Addr:", remoteIP)
+
+	if remoteIP != req.SourceServiceIP {
+		middleware.ResponseError(c, 2001, errors.New("ip addresses didn't match"))
+		return
+	}
+
+	microserviceToken, err := IssueMicroserviceToken(req)
+	if err != nil {
+		middleware.ResponseError(c, 2002, err)
+		return
+	}
+
+	middleware.ResponseSuccess(c, microserviceToken)
 }
 
 func HttpsServerRun() {

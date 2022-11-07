@@ -5,10 +5,11 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/joexu01/ingress-gateway/public"
 	"github.com/joexu01/ingress-gateway/secret"
+	"log"
 	"time"
 )
 
-func IssueGatewayToken(request IssueRequest) (string, error) {
+func IssueGatewayToken(request *IssueRequest) (string, error) {
 	if request.RequestType != public.TokenRequestTypeGateway {
 		return "", errors.New("bad function call: this function only issues a gateway token")
 	}
@@ -41,13 +42,14 @@ func IssueGatewayToken(request IssueRequest) (string, error) {
 	return token, nil
 }
 
-func IssueMicroserviceToken(request IssueRequest) (string, error) {
+func IssueMicroserviceToken(request *IssueRequest) (string, error) {
 	if request.RequestType != public.TokenRequestTypeMicroservice {
 		return "", errors.New("bad function call: this function only issues a gateway token")
 	}
 
 	prevTokenClaims, err := getTokenClaimsFromTokenStr(request.PreviousToken, secret.RemoteSecretHandler.RetrieveSecret(request.SourceServiceIP))
 	if err != nil {
+		log.Println("SourceIP:", request.SourceServiceIP, "  Secret:", secret.RemoteSecretHandler.RetrieveSecret(request.SourceServiceIP))
 		return "", errors.New("invalid previous token claims")
 	}
 

@@ -1,10 +1,12 @@
 [http]
+internal_ip = "172.16.63.1"
 addr = "0.0.0.0:8080"
 read_timeout = 10                   # 读取超时时长
 write_timeout = 10                  # 写入超时时长
 max_header_bytes = 60               # 最大的header大小，二进制位长度
 
 [https]
+internal_ip = "172.16.63.1"
 addr = "0.0.0.0:4433"               # 监听地址, default ":443"
 read_timeout = 10                   # 读取超时时长
 write_timeout = 10                  # 写入超时时长

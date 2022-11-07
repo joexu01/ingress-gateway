@@ -32,6 +32,7 @@ func InitRouter(m ...gin.HandlerFunc) *gin.Engine {
 		proxyMiddleware.HTTPHeaderTransformMiddleware(),
 		proxyMiddleware.HTTPStripURIMiddleware(),
 		proxyMiddleware.HTTPURLRewriteMiddleware(),
+		//proxyMiddleware.HTTPTransformToInternalTokenMiddleware(),
 		proxyMiddleware.HTTPReverseProxyMiddleware(),
 	)
 

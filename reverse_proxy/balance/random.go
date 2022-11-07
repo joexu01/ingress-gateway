@@ -30,7 +30,7 @@ func (r *RandomBalance) Next() string {
 	return r.addresses[r.currentIndex]
 }
 
-func (r *RandomBalance) Get(key string) (string, error) {
+func (r *RandomBalance) Get(_ string) (string, error) {
 	return r.Next(), nil
 }
 
