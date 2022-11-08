@@ -20,6 +20,10 @@ var ServiceHttpSrvHandler *http.Server
 
 func IssuerInitRouter() *gin.Engine {
 	router := gin.Default()
+	router.Use(
+		middleware.TranslationMiddleware(),
+		middleware.RecoveryMiddleware(),
+	)
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
@@ -31,7 +35,8 @@ func IssuerInitRouter() *gin.Engine {
 
 func IssueMicroserviceTokenHandler(c *gin.Context) {
 	req := &IssueRequest{}
-	err := req.BindValidParams(c)
+	//err := req.BindValidParams(c)
+	err := c.ShouldBindJSON(req)
 	if err != nil {
 		middleware.ResponseError(c, 2000, err)
 		return

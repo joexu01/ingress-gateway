@@ -8,6 +8,7 @@ import (
 	"github.com/joexu01/ingress-gateway/public"
 	reverse "github.com/joexu01/ingress-gateway/reverse_proxy"
 	"github.com/joexu01/ingress-gateway/service"
+	cache "github.com/joexu01/ingress-gateway/token_cache"
 	token "github.com/joexu01/ingress-gateway/token_service"
 	"github.com/joexu01/ingress-gateway/user"
 	"github.com/pkg/errors"
@@ -92,12 +93,28 @@ func HTTPReverseProxyMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		// 向请求头部添加 token
+
 		c.Request.Header.Add("Internal-Token", gatewayToken)
+		c.Request.Header.Add("Gateway-Token", gatewayToken)
 		c.Request.Header.Del("User-Identity-Token")
+
+		// 在 cache 中记录 Gateway-Token 有效性
+
+		err = cache.TokenCacheServiceHandler.Validate(gatewayToken)
+		if err != nil {
+			middleware.ResponseError(c, 2005, err)
+			c.Abort()
+			return
+		}
 
 		//使用reverse proxy.ServeHTTP(c.Request, c.Response)
 		rp := reverse.NewLoadBalanceReverseProxy(c, nextAddr, trans)
 		rp.ServeHTTP(c.Writer, c.Request)
+
+		_ = cache.TokenCacheServiceHandler.Revoke(gatewayToken)
+		log.Printf("Gateway Token %s has been revoked.\n", gatewayToken[:12])
+
 		c.Next()
 	}
 }

@@ -3,8 +3,8 @@
     "info": {
       "id": 1,
       "load_type": "http",
-      "service_name": "HTTP 反向代理测试服务 1",
-      "service_desc": "HTTP 反向代理测试服务 1",
+      "service_name": "HTTP Reverse Proxy Service 1",
+      "service_desc": "HTTP Reverse Proxy Service 1",
       "created_at": "2022-11-01T10:20:07.577545561+08:00"
     },
     "http_rule": {
@@ -36,8 +36,8 @@
     "info": {
       "id": 2,
       "load_type": "http",
-      "service_name": "HTTP 反向代理测试服务 2",
-      "service_desc": "HTTP 反向代理测试服务 2",
+      "service_name": "HTTP Reverse Proxy Service 2",
+      "service_desc": "HTTP Reverse Proxy Service 2",
       "created_at": "2022-11-01T10:20:07.577545561+08:00"
     },
     "http_rule": {
@@ -51,7 +51,7 @@
       "check_timeout": 5,
       "check_interval": 120,
       "round_type": "round",
-      "ip_list": "127.0.0.1:3008",
+      "ip_list": "172.16.63.132:3008",
       "forbid_list": "",
       "upstream_connect_timeout": 5,
       "upstream_header_timeout": 5,
