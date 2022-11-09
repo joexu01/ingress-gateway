@@ -2,19 +2,18 @@ package main
 
 import (
 	"fmt"
-	"github.com/joexu01/ingress-gateway/public"
-	"io/ioutil"
-	"log"
 	"os"
+	"strings"
 )
 
 func main() {
-	fi, _ := os.Open(public.ServiceRuleFile)
-	bytes, err := ioutil.ReadAll(fi)
-	if err != nil {
-		log.Fatal(err)
+	environ := os.Environ()
+
+	for _, env := range environ {
+		e := env
+		split := strings.Split(e, "=")
+		if split[0] == "SEC_VER" {
+			fmt.Println(split[1])
+		}
 	}
-
-	fmt.Println(string(bytes))
-
 }

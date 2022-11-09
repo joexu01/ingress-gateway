@@ -88,6 +88,8 @@ type VegetableList struct {
 }
 
 func echo(rw http.ResponseWriter, r *http.Request) {
+	handlerPattern := "/echo"
+
 	internal := r.Header.Get("Internal-Token")
 	log.Println("Internal Token:", internal)
 
@@ -115,7 +117,23 @@ func echo(rw http.ResponseWriter, r *http.Request) {
 		_, _ = rw.Write([]byte("failed to get token claims"))
 		return
 	}
-	claimStr := fmt.Sprintf("%+v", userClaims)
+
+	// 这一步是检查到来的请求的 url path 是否与 gateway 看到的请求 url path 一致
+	//
+	// 一般来说，一个 url 的形式如下
+	//
+	//	[scheme:][//[userinfo@]host][/]path[?query][#fragment]
+	//
+	// 比如用户请求的是 /echo ，Gateway 会将这个 path 记录到 Gateway-Token 中
+	//
+	// 微服务在收到请求后，会检查 Gateway-Token 中的 path 是否与 url 中的 path 一致
+	// 如果不一致，说明可能是攻击者利用其他 Gateway-Token 发送的伪造请求
+
+	claimStr := fmt.Sprintf("\n\nToken Claims: %+v\n\n", userClaims)
+	if handlerPattern != userClaims.RequestResource {
+		rw.WriteHeader(http.StatusBadRequest)
+		_, _ = rw.Write([]byte("bad request path"))
+	}
 
 	var rspText string
 
@@ -146,6 +164,8 @@ func echo(rw http.ResponseWriter, r *http.Request) {
 }
 
 func vegetable(rw http.ResponseWriter, req *http.Request) {
+	handlerPattern := "/vegetable"
+
 	// 取得 tokens
 	internal := req.Header.Get("Internal-Token")
 	log.Println("Internal Token:", internal)
@@ -175,6 +195,12 @@ func vegetable(rw http.ResponseWriter, req *http.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		_, _ = rw.Write([]byte("failed to get token claims"))
 		return
+	}
+
+	log.Printf("\n\nToken Claims: %+v\n\n", userClaims)
+	if handlerPattern != userClaims.RequestResource {
+		rw.WriteHeader(http.StatusBadRequest)
+		_, _ = rw.Write([]byte("bad request path"))
 	}
 
 	// 请求访问 Microservice2 的 Token

@@ -73,6 +73,8 @@ type ContextItem struct {
 }
 
 func echo(rw http.ResponseWriter, r *http.Request) {
+	handlerPattern := "/echo"
+
 	internal := r.Header.Get("Internal-Token")
 	log.Println("Internal Token:", internal)
 
@@ -100,7 +102,12 @@ func echo(rw http.ResponseWriter, r *http.Request) {
 		_, _ = rw.Write([]byte("failed to get token claims"))
 		return
 	}
-	claimStr := fmt.Sprintf("%+v", userClaims)
+
+	log.Printf("\n\nToken Claims: %+v\n\n", userClaims)
+	if handlerPattern != userClaims.RequestResource {
+		rw.WriteHeader(http.StatusBadRequest)
+		_, _ = rw.Write([]byte("bad request path"))
+	}
 
 	var rspText string
 
@@ -123,7 +130,6 @@ func echo(rw http.ResponseWriter, r *http.Request) {
 		rspText += h
 	}
 
-	rspText += claimStr
 	rw.Header().Add("Content-Type", "text/html")
 	rw.WriteHeader(http.StatusOK)
 	log.Println(rspText)
@@ -131,6 +137,8 @@ func echo(rw http.ResponseWriter, r *http.Request) {
 }
 
 func potato(rw http.ResponseWriter, req *http.Request) {
+	handlerPattern := "/potato"
+
 	internal := req.Header.Get("Internal-Token")
 	log.Println("Internal Token:", internal)
 
@@ -159,7 +167,12 @@ func potato(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	//claimsStr := fmt.Sprintf("%+v", userClaims)
+	log.Printf("\n\nToken Claims: %+v\n\n", userClaims)
+	if handlerPattern != userClaims.RequestResource {
+		rw.WriteHeader(http.StatusBadRequest)
+		_, _ = rw.Write([]byte("bad request path"))
+	}
+
 	respStr := fmt.Sprintf(`{"userID":"%s","vegetableType":"potato","amount":3000}`, userClaims.UserID)
 	_, _ = rw.Write([]byte(respStr))
 }
