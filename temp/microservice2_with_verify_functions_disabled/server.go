@@ -19,6 +19,7 @@ type DefaultTokenClaims struct {
 	RequestResource string        `json:"rqr"`
 	SourceServiceIP string        `json:"sip"`
 	GenerateTime    int64         `json:"grt"`
+	RandomStr       string        `json:"rds,omitempty"`
 	Context         []ContextItem `json:"ctx"`
 	jwt.RegisteredClaims
 }

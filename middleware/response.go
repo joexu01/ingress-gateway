@@ -45,18 +45,21 @@ func ResponseError(c *gin.Context, code ResponseCode, err error) {
 	}
 
 	resp := &Response{ErrorCode: code, ErrorMsg: err.Error(), Data: "", TraceId: traceId, Stack: stack}
-	if code <= 1000 {
-		c.JSON(int(code), resp)
-	} else {
-		c.JSON(200, resp)
-	}
+
 	response, _ := json.Marshal(resp)
 	c.Set("response", string(response))
-	if code <= 1000 {
-		_ = c.AbortWithError(int(code), err)
-	} else {
-		_ = c.AbortWithError(200, err)
-	}
+	c.AbortWithStatusJSON(500, resp)
+	//c.JSON(500, resp)
+	//if code <= 1000 {
+	//	c.JSON(500, resp)
+	//} else {
+	//	c.JSON(500, resp)
+	//}
+	//if code <= 1000 {
+	//	_ = c.AbortWithError(500, err)
+	//} else {
+	//	_ = c.AbortWithError(500, err)
+	//}
 	//TODO: No receiver here at first
 }
 
